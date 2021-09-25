@@ -1,0 +1,54 @@
+version: '2.0'
+services:
+  auction-system-main:
+    container_name: auction-system-main
+    image: greedy_games/auction_system:latest
+    restart: always
+    command: bash -c "python3 manage.py runserver 0.0.0.0:9000"
+    expose:
+      - "9000"
+    ports:
+      - 9000:9000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+    depends_on:
+      - "redis_greedy"
+
+  auction_system_bidder_1:
+    container_name: auction_system_bidder_1
+    image: greedy_games/auction_system:latest
+    restart: always
+    command: bash -c "python3 manage.py poll 1"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+    depends_on:
+      - "redis_greedy"
+      - "auction-system-main"
+
+  auction_system_bidder_2:
+    container_name: auction_system_bidder_2
+    image: greedy_games/auction_system:latest
+    restart: always
+    command: bash -c "python3 manage.py poll 2"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "170m"
+        max-file: "5"
+    depends_on:
+      - "redis_greedy"
+      - "auction-system-main"
+
+  redis_greedy:
+    image: redis:6.2.5
+    container_name: redis_greedy
+    ports:
+      - '6379:6379'
+    expose:
+      - 6379
