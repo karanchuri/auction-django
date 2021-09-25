@@ -11,6 +11,12 @@
 4. After 200 ms wait on that endpoint whatever bid is set on cache is being send back to the auctioneer
 
 ## Docker Setup:
+Easy Setup:
+```
+chmod u+x build.sh
+./build.sh
+```
+
 Step 1 (Build):
 ```bash
 docker build -t greedy_games/auction_system:latest .
